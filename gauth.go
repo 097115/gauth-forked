@@ -11,6 +11,7 @@ import (
 	"text/tabwriter"
 	"time"
 
+	"github.com/tiagomelo/go-clipboard/clipboard"
 	"github.com/creachadair/otp/otpauth"
 	"github.com/pcarrier/gauth/gauth"
 	"golang.org/x/term"
@@ -201,6 +202,10 @@ func printBareCode(accountName string, urls []*otpauth.URL) {
 			_, curr, _, err := gauth.Codes(url)
 			if err != nil {
 				log.Fatalf("Generating codes for %q: %v", url.Account, err)
+			}
+			c := clipboard.New()
+			if err := c.CopyText(curr); err != nil {
+				fmt.Println(err)
 			}
 			fmt.Print(curr)
 			return
